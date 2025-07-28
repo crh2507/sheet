@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>📋 RAYCOIN Task Viewer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f9f9f9; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #eee; }
+  </style>
+</head>
+<body>
+
+<h1>📋 RAYCOIN Task Viewer</h1>
+<p>Live view of your Google Sheet tasks:</p>
+<table id="csvTable"></table>
+
+<script>
+  const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRAwAul38YOMZC-hLPk4nz3YG9fMYjLyR69OHG29OIY5vjSMk5lQTKpwdJRsfFKRU9zMc6dC2z60W0c/pub?output=csv";
+
+  fetch(url)
+    .then(res => res.text())
+    .then(csv => {
+      const rows = csv.trim().split("\n").map(r => r.split(","));
+      const table = document.getElementById("csvTable");
+      table.innerHTML = rows.map((row, i) =>
+        "<tr>" + row.map(cell =>
+          `<${i === 0 ? "th" : "td"}>${cell.trim()}</${i === 0 ? "th" : "td"}>`
+        ).join("") + "</tr>"
+      ).join("");
+    });
+</script>
+
+</body>
+</html>
